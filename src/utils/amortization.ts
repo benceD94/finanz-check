@@ -7,8 +7,11 @@ export function calculateAmortization(input: ScenarioInput): DataPoint[] {
 
   let balance = loanAmount;
   let totalInterest = 0;
+  let yearInterest = 0;
+  let yearTilgung = 0;
+
   const data: DataPoint[] = [
-    { year: 0, remainingBalance: balance, totalInterestPaid: 0 },
+    { year: 0, remainingBalance: balance, totalInterestPaid: 0, yearlyInterest: 0, yearlyTilgung: 0 },
   ];
 
   const maxMonths = 40 * 12;
@@ -16,23 +19,27 @@ export function calculateAmortization(input: ScenarioInput): DataPoint[] {
   for (let month = 1; month <= maxMonths; month++) {
     const interest = balance * monthlyRate;
     totalInterest += interest;
+    yearInterest += interest;
     const principal = Math.min(monthlyPayment - interest, balance);
     balance -= principal;
+    yearTilgung += principal;
 
     // Apply extra payment at end of each year
     if (month % 12 === 0 && balance > 0) {
       const extra = Math.min(extraPayment, balance);
       balance -= extra;
+      yearTilgung += extra;
     }
 
     if (balance <= 0) {
       balance = 0;
-      // Record final data point at fractional year
       const year = Math.round((month / 12) * 100) / 100;
       data.push({
         year,
         remainingBalance: 0,
         totalInterestPaid: Math.round(totalInterest * 100) / 100,
+        yearlyInterest: Math.round(yearInterest * 100) / 100,
+        yearlyTilgung: Math.round(yearTilgung * 100) / 100,
       });
       break;
     }
@@ -43,7 +50,11 @@ export function calculateAmortization(input: ScenarioInput): DataPoint[] {
         year: month / 12,
         remainingBalance: Math.round(balance * 100) / 100,
         totalInterestPaid: Math.round(totalInterest * 100) / 100,
+        yearlyInterest: Math.round(yearInterest * 100) / 100,
+        yearlyTilgung: Math.round(yearTilgung * 100) / 100,
       });
+      yearInterest = 0;
+      yearTilgung = 0;
     }
   }
 

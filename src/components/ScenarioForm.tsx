@@ -6,7 +6,7 @@ interface Props {
 }
 
 const defaults: ScenarioInput = {
-  loanAmount: 300000,
+  loanAmount: 468000,
   interestRate: 3.76,
   tilgungRate: 2,
   extraPayment: 10000,

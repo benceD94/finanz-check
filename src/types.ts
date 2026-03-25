@@ -9,6 +9,8 @@ export interface DataPoint {
   year: number;
   remainingBalance: number;
   totalInterestPaid: number;
+  yearlyInterest: number;   // Zinsen paid this year
+  yearlyTilgung: number;    // principal repaid this year
 }
 
 export interface Scenario {

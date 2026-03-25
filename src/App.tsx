@@ -4,6 +4,7 @@ import { calculateAmortization, formatLabel } from './utils/amortization';
 import ScenarioForm from './components/ScenarioForm';
 import AmortizationChart from './components/AmortizationChart';
 import ScenarioSummary from './components/ScenarioSummary';
+import ScenarioComparison from './components/ScenarioComparison';
 
 let nextId = 1;
 
@@ -48,6 +49,10 @@ export default function App() {
 
         <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <ScenarioSummary scenarios={scenarios} onRemove={removeScenario} />
+        </section>
+
+        <section className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+          <ScenarioComparison scenarios={scenarios} />
         </section>
       </div>
     </div>
