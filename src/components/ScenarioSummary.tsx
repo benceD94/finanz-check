@@ -1,4 +1,5 @@
 import type { Scenario } from '../types';
+import { exportScenarioCsv } from '../utils/csv-export';
 
 const COLORS = [
   '#2563eb', '#dc2626', '#16a34a', '#d97706', '#7c3aed',
@@ -67,7 +68,14 @@ export default function ScenarioSummary({ scenarios, onRemove }: Props) {
                 <td className="py-2 pr-4 text-right font-medium text-gray-900">
                   {formatEuro(s.totalInterest)}
                 </td>
-                <td className="py-2">
+                <td className="py-2 flex items-center gap-2">
+                  <button
+                    onClick={() => exportScenarioCsv(s.input, s.label, new Date())}
+                    className="text-gray-400 hover:text-blue-500 transition-colors cursor-pointer text-xs"
+                    title="Export CSV"
+                  >
+                    CSV
+                  </button>
                   <button
                     onClick={() => onRemove(s.id)}
                     className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
