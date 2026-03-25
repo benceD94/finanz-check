@@ -5,7 +5,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from 'recharts';
 import type { Scenario } from '../types';
@@ -35,7 +34,7 @@ function formatEuro(value: number): string {
 export default function AmortizationChart({ scenarios }: Props) {
   if (scenarios.length === 0) {
     return (
-      <div className="flex items-center justify-center h-80 text-gray-400 border border-dashed border-gray-300 rounded-xl">
+      <div className="flex items-center justify-center h-48 sm:h-80 text-gray-400 border border-dashed border-gray-300 rounded-xl text-sm sm:text-base">
         Add a scenario to see the chart
       </div>
     );
@@ -64,8 +63,9 @@ export default function AmortizationChart({ scenarios }: Props) {
   const isSingle = scenarios.length === 1;
 
   return (
-    <ResponsiveContainer width="100%" height={450}>
-      <AreaChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 20 }}>
+    <>
+    <ResponsiveContainer width="100%" height={300} minHeight={250}>
+      <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis
           dataKey="year"
@@ -73,14 +73,12 @@ export default function AmortizationChart({ scenarios }: Props) {
         />
         <YAxis
           tickFormatter={(v: number) => `${Math.round(v / 1000)}k`}
-          label={{ value: 'Remaining (€)', angle: -90, position: 'insideLeft', offset: 10 }}
+          width={45}
         />
         <Tooltip
           formatter={(value, name) => [formatEuro(Number(value)), String(name)]}
           labelFormatter={(label) => `Year ${label}`}
         />
-        <Legend />
-
         {scenarios.map((s, i) => (
           <Area
             key={`zinsen_${s.id}`}
@@ -105,5 +103,23 @@ export default function AmortizationChart({ scenarios }: Props) {
         ))}
       </AreaChart>
     </ResponsiveContainer>
+
+    {/* Legend outside chart so it doesn't shrink the plot area */}
+    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs sm:text-sm text-gray-600 justify-center">
+      {scenarios.map((s, i) => (
+        <div key={s.id} className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1">
+            <span className="w-3 h-3 rounded-sm inline-block" style={{ backgroundColor: COLORS_LIGHT[i % COLORS_LIGHT.length] }} />
+            Zinsen
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span className="w-3 h-3 rounded-sm inline-block" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+            Tilgung
+          </span>
+          {!isSingle && <span className="text-gray-400">({s.label})</span>}
+        </div>
+      ))}
+    </div>
+    </>
   );
 }

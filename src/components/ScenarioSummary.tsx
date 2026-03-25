@@ -23,52 +23,23 @@ export default function ScenarioSummary({ scenarios, onRemove }: Props) {
   if (scenarios.length === 0) return null;
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm text-left">
-        <thead>
-          <tr className="border-b border-gray-200 text-gray-500">
-            <th className="py-2 pr-4 font-medium">Scenario</th>
-            <th className="py-2 pr-4 font-medium text-right">Loan</th>
-            <th className="py-2 pr-4 font-medium text-right">Rate</th>
-            <th className="py-2 pr-4 font-medium text-right">Tilgung</th>
-            <th className="py-2 pr-4 font-medium text-right">Extra/yr</th>
-            <th className="py-2 pr-4 font-medium text-right">Payoff</th>
-            <th className="py-2 pr-4 font-medium text-right">Total interest</th>
-            <th className="py-2 font-medium"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {scenarios.map((s, i) => {
-            const years = Math.floor(s.payoffYears);
-            const months = Math.round((s.payoffYears - years) * 12);
-            return (
-              <tr key={s.id} className="border-b border-gray-100">
-                <td className="py-2 pr-4 flex items-center gap-2">
+    <>
+      {/* Mobile: card layout */}
+      <div className="sm:hidden space-y-3">
+        {scenarios.map((s, i) => {
+          const years = Math.floor(s.payoffYears);
+          const months = Math.round((s.payoffYears - years) * 12);
+          return (
+            <div key={s.id} className="border border-gray-200 rounded-lg p-3">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 min-w-0">
                   <span
                     className="inline-block w-3 h-3 rounded-full shrink-0"
                     style={{ backgroundColor: COLORS[i % COLORS.length] }}
                   />
-                  <span className="text-gray-900 font-medium">{s.label}</span>
-                </td>
-                <td className="py-2 pr-4 text-right text-gray-700">
-                  {formatEuro(s.input.loanAmount)}
-                </td>
-                <td className="py-2 pr-4 text-right text-gray-700">
-                  {s.input.interestRate}%
-                </td>
-                <td className="py-2 pr-4 text-right text-gray-700">
-                  {s.input.tilgungRate}%
-                </td>
-                <td className="py-2 pr-4 text-right text-gray-700">
-                  {formatEuro(s.input.extraPayment)}
-                </td>
-                <td className="py-2 pr-4 text-right text-gray-700">
-                  {years}y {months}m
-                </td>
-                <td className="py-2 pr-4 text-right font-medium text-gray-900">
-                  {formatEuro(s.totalInterest)}
-                </td>
-                <td className="py-2 flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-900 truncate">{s.label}</span>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => exportScenarioCsv(s.input, s.label, new Date())}
                     className="text-gray-400 hover:text-blue-500 transition-colors cursor-pointer text-xs"
@@ -83,12 +54,95 @@ export default function ScenarioSummary({ scenarios, onRemove }: Props) {
                   >
                     &times;
                   </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                <div className="text-gray-500">Loan</div>
+                <div className="text-right text-gray-700">{formatEuro(s.input.loanAmount)}</div>
+                <div className="text-gray-500">Rate</div>
+                <div className="text-right text-gray-700">{s.input.interestRate}%</div>
+                <div className="text-gray-500">Tilgung</div>
+                <div className="text-right text-gray-700">{s.input.tilgungRate}%</div>
+                <div className="text-gray-500">Extra/yr</div>
+                <div className="text-right text-gray-700">{formatEuro(s.input.extraPayment)}</div>
+                <div className="text-gray-500">Payoff</div>
+                <div className="text-right text-gray-700">{years}y {months}m</div>
+                <div className="text-gray-500 font-medium">Total interest</div>
+                <div className="text-right font-medium text-gray-900">{formatEuro(s.totalInterest)}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop: table layout */}
+      <div className="hidden sm:block overflow-x-auto">
+        <table className="w-full text-sm text-left">
+          <thead>
+            <tr className="border-b border-gray-200 text-gray-500">
+              <th className="py-2 pr-4 font-medium">Scenario</th>
+              <th className="py-2 pr-4 font-medium text-right">Loan</th>
+              <th className="py-2 pr-4 font-medium text-right">Rate</th>
+              <th className="py-2 pr-4 font-medium text-right">Tilgung</th>
+              <th className="py-2 pr-4 font-medium text-right">Extra/yr</th>
+              <th className="py-2 pr-4 font-medium text-right">Payoff</th>
+              <th className="py-2 pr-4 font-medium text-right">Total interest</th>
+              <th className="py-2 font-medium"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {scenarios.map((s, i) => {
+              const years = Math.floor(s.payoffYears);
+              const months = Math.round((s.payoffYears - years) * 12);
+              return (
+                <tr key={s.id} className="border-b border-gray-100">
+                  <td className="py-2 pr-4 flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded-full shrink-0"
+                      style={{ backgroundColor: COLORS[i % COLORS.length] }}
+                    />
+                    <span className="text-gray-900 font-medium">{s.label}</span>
+                  </td>
+                  <td className="py-2 pr-4 text-right text-gray-700">
+                    {formatEuro(s.input.loanAmount)}
+                  </td>
+                  <td className="py-2 pr-4 text-right text-gray-700">
+                    {s.input.interestRate}%
+                  </td>
+                  <td className="py-2 pr-4 text-right text-gray-700">
+                    {s.input.tilgungRate}%
+                  </td>
+                  <td className="py-2 pr-4 text-right text-gray-700">
+                    {formatEuro(s.input.extraPayment)}
+                  </td>
+                  <td className="py-2 pr-4 text-right text-gray-700">
+                    {years}y {months}m
+                  </td>
+                  <td className="py-2 pr-4 text-right font-medium text-gray-900">
+                    {formatEuro(s.totalInterest)}
+                  </td>
+                  <td className="py-2 flex items-center gap-2">
+                    <button
+                      onClick={() => exportScenarioCsv(s.input, s.label, new Date())}
+                      className="text-gray-400 hover:text-blue-500 transition-colors cursor-pointer text-xs"
+                      title="Export CSV"
+                    >
+                      CSV
+                    </button>
+                    <button
+                      onClick={() => onRemove(s.id)}
+                      className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
+                      title="Remove scenario"
+                    >
+                      &times;
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

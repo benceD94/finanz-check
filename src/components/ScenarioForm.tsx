@@ -26,7 +26,7 @@ export default function ScenarioForm({ onAdd }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-wrap gap-4 items-end">
+    <form onSubmit={handleSubmit} className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-4 items-end">
       <Field
         label="Loan amount (€)"
         value={form.loanAmount}
@@ -59,7 +59,7 @@ export default function ScenarioForm({ onAdd }: Props) {
       />
       <button
         type="submit"
-        className="h-10 px-5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer"
+        className="h-10 px-5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors cursor-pointer col-span-2 sm:col-span-1"
       >
         Add scenario
       </button>
@@ -92,7 +92,7 @@ function Field({
         step={step}
         min={min}
         max={max}
-        className="h-10 w-44 px-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="h-10 w-full sm:w-44 px-3 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       />
     </label>
   );
